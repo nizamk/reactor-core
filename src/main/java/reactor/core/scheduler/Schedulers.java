@@ -355,7 +355,7 @@ public abstract class Schedulers {
 	public static Scheduler newTimer(String name, boolean daemon) {
 		return newTimer(new SchedulerThreadFactory(name,
 				daemon,
-				SingleTimedScheduler.COUNTER));
+				SingleScheduler.TIMER_COUNTER));
 	}
 
 	/**
@@ -506,6 +506,16 @@ public abstract class Schedulers {
 	}
 
 	/**
+	 * Verifies that a {@link Scheduler} is {@link Scheduler#isTimeCapable() time-capable}
+	 * and throw an {@link IllegalArgumentException} if not.
+	 *
+	 * @param scheduler the scheduler to check.
+	 */
+	public static void checkTimeCapable(Scheduler scheduler) {
+		if (!scheduler.isTimeCapable()) throw new IllegalArgumentException("Scheduler must be time-capable");
+	}
+
+	/**
 	 * Public factory hook to override Schedulers behavior globally
 	 */
 	public interface Factory {
@@ -572,7 +582,7 @@ public abstract class Schedulers {
 		 * @return a new time-capable {@link Scheduler}
 		 */
 		default TimedScheduler newTimer(ThreadFactory threadFactory) {
-			return new SingleTimedScheduler(threadFactory);
+			return new SingleScheduler(threadFactory);
 		}
 	}
 
@@ -690,6 +700,11 @@ public abstract class Schedulers {
 		CachedScheduler(String key, Scheduler cached) {
 			this.cached = cached;
 			this.key = key;
+		}
+
+		@Override
+		public boolean isTimeCapable() {
+			return cached.isTimeCapable();
 		}
 
 		@Override
