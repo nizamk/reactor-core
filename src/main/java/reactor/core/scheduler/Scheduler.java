@@ -245,15 +245,6 @@ public interface Scheduler extends Disposable {
 		}
 
 		/**
-		 * Returns the "current time" notion of this scheduler.
-		 * @param unit the target unit of the current time
-		 * @return the current time value in the target unit of measure
-		 */
-		default long now(TimeUnit unit) {
-			return unit.convert(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
-		}
-
-		/**
 		 * Instructs this worker to cancel all pending tasks, all running tasks in 
 		 * a best-effort manner, reject new tasks and
 		 * release any resources associated with it.

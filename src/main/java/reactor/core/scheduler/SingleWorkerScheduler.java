@@ -68,11 +68,6 @@ final class SingleWorkerScheduler implements Scheduler, Executor {
     }
 
     @Override
-    public long now(TimeUnit unit) {
-        return main.now(unit);
-    }
-
-    @Override
     public void execute(Runnable command) {
         main.schedule(command);
     }

@@ -15,6 +15,8 @@
  */
 package reactor.core.scheduler;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * Provides an abstract, timed asynchronous boundary to operators.
  *
@@ -33,5 +35,16 @@ public interface TimedScheduler extends Scheduler {
 	 */
 	@Deprecated
 	interface TimedWorker extends Worker {
+
+		/**
+		 * Returns the "current time" notion of this scheduler.
+		 * @param unit the target unit of the current time
+		 * @return the current time value in the target unit of measure
+		 * @deprecated will be removed with the class in 3.1.0, where it is expected that only Scheduler.now is used.
+		 */
+		@Deprecated
+		default long now(TimeUnit unit) {
+			return unit.convert(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
+		}
 	}
 }
